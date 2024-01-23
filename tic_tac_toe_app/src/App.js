@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+// Square component represents a single square in the Tic Tac Toe board
 function Square({ value, onSquareClick }) {
   return (
     <button className="square" onClick={onSquareClick}>
@@ -8,7 +9,9 @@ function Square({ value, onSquareClick }) {
   );
 }
 
+// Board component represents the Tic Tac Toe board and manages the game logic
 function Board({ xIsNext, squares, onPlay }) {
+  // Handles the click event on a square
   function handleClick(i) {
     if (calculateWinner(squares) || squares[i]) {
       return;
@@ -22,6 +25,7 @@ function Board({ xIsNext, squares, onPlay }) {
     onPlay(nextSquares);
   }
 
+  // Determines the game status and winner
   const winner = calculateWinner(squares);
   let status;
   if (winner) {
@@ -30,6 +34,7 @@ function Board({ xIsNext, squares, onPlay }) {
     status = 'Next player: ' + (xIsNext ? 'X' : 'O');
   }
 
+  // Renders the board with squares
   return (
     <>
       <div className="status">{status}</div>
@@ -52,22 +57,26 @@ function Board({ xIsNext, squares, onPlay }) {
   );
 }
 
+// Game component represents the overall Tic Tac Toe game
 export default function Game() {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
 
+  // Handles the play event and updates the game history
   function handlePlay(nextSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
   }
 
+  // Jumps to a specific move in the game history
   function jumpTo(nextMove) {
     setCurrentMove(nextMove);
   }
 
+  // Generates a list of moves with buttons to jump to a specific move
   const moves = history.map((squares, move) => {
     let description;
     if (move > 0) {
@@ -82,6 +91,7 @@ export default function Game() {
     );
   });
 
+  // Renders the game with the board and move history
   return (
     <div className="game">
       <div className="game-board">
@@ -94,6 +104,7 @@ export default function Game() {
   );
 }
 
+// Helper function to calculate the winner based on the current board state
 function calculateWinner(squares) {
   const lines = [
     [0, 1, 2],
@@ -113,3 +124,4 @@ function calculateWinner(squares) {
   }
   return null;
 }
+
